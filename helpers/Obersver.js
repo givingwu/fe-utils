@@ -1,8 +1,8 @@
-
 /**
- * @Class Observer
+ * @class Observer
  * @author VuChan
  * @constructor
+ * @see https://github.com/vuchan/fe-utils/blob/master/helpers/Obersver.js
  * @return {Object} Observer Design Pattern Implementation
  */
 export default function Observer() {
@@ -11,9 +11,9 @@ export default function Observer() {
 
 /**
  * observer.on('eventName', function listener() {})
- * @param  {String} eventName
+ * @param  {string} eventName
  * @param  {Function} listener
- * @return {handlers<Array>}
+ * @return {Array<Function>}
  */
 Observer.prototype.on = function (eventName, listener) {
   if (!this.events[ eventName ]) {
@@ -27,9 +27,9 @@ Observer.prototype.on = function (eventName, listener) {
 
 /**
  * observer.off('eventName', function listener() {})
- * @param  {String} eventName
+ * @param  {string} eventName
  * @param  {Function} listener
- * @return {Boolean|Null}
+ * @return {boolean|null}
  */
 Observer.prototype.off = function (eventName, listener) {
   if (eventName) {
@@ -50,9 +50,9 @@ Observer.prototype.off = function (eventName, listener) {
 
 /**
  * observer.trigger('eventName', data1, data2, ...dataN)
- * @param  {String} eventName
+ * @param  {string} eventName
  * @param  {Array}  data
- * @return {Boolean}
+ * @return {boolean}
  */
 Observer.prototype.trigger = function (eventName, ...data) {
   const handlers = this.events[ eventName ];
