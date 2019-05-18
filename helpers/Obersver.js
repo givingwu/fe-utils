@@ -49,12 +49,12 @@ Observer.prototype.off = function (eventName, listener) {
 };
 
 /**
- * observer.trigger('eventName', data1, data2, ...dataN)
+ * observer.emit('eventName', data1, data2, ...dataN)
  * @param  {string} eventName
  * @param  {Array}  data
  * @return {boolean}
  */
-Observer.prototype.trigger = function (eventName, ...data) {
+Observer.prototype.emit = function (eventName, ...data) {
   const handlers = this.events[ eventName ];
 
   if (handlers) {
