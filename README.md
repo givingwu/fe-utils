@@ -1,6 +1,6 @@
-# ff/utils
+# utils
 
-提供常用的 `utils` 工具方法，欢迎`PR`。
+提供常用的 `utils` 工具方法。
 
 ## Type Checker
 
