@@ -287,7 +287,7 @@ export const checkPropsValue = (obj, msg) => {
 提供观察订阅者模式 `Observer` 的实现。
 
 ```JavaScript
-import Observer from 'ff/utils/helpers/Obersver'
+import Observer from './utils/helpers/Obersver'
 const EventStore = new Observer()
 
 function logs(...args) {
@@ -307,7 +307,8 @@ EventStore.off('loaded', logs) // true
 > PS：对于 Server `setCookie`后的 Cookie 如果带有 **`HttpOnly;`** 属性，前端是无法通过 `document.cookie` 获取和操作的。
 
 ```JavaScript
-import Cookie, { getCookie, setCookie } from 'ff/utils/helpers/Cookie'
+import Cookie, { getCookie, setCookie } from '
+utils/helpers/Cookie'
 
 console.log(Cookie.all),;
 console.log(Cookie.get('ff'), getCookie('ff'))
