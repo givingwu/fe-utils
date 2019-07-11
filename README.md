@@ -321,7 +321,7 @@ console.log(Cookie.get('ff', 'woooo~~'), setCookit('ff', 'woooo~~'))
 提供常用数据结构 `Queue` 的实现。
 
 ```JavaScript
-import Queue from 'ff/utils/helpers/Queue';
+import Queue from './utils/helpers/Queue';
 
 Queue.debug = true; // open debug model, log Queue `in` & `out` item.
 
