@@ -312,7 +312,7 @@ utils/helpers/Cookie'
 
 console.log(Cookie.all),;
 console.log(Cookie.get('ff'), getCookie('ff'))
-console.log(Cookie.get('ff', 'woooo~~'), setCookit('ff', 'woooo~~'))
+console.log(Cookie.get('ff', 'woooo~~'), setCookie('ff', 'woooo~~'))
 ```
 
 
