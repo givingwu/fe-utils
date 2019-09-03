@@ -9,6 +9,7 @@ import { hasOwn } from '@@/utils/index'
  *
  * isStandardData
  * @param {StandardData|{}} data
+ * @returns {boolean}
  */
 export const isStandardResponseBody = (data) => {
   if (typeof data === 'object') {

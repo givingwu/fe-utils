@@ -1,8 +1,9 @@
+import createError from 'axios/lib/core/createError'
 import { errorMessage } from '@@/utils/message'
 import { getMessage } from '../helpers/get-message'
+import { codeHandlers } from '../helpers/code-status-handler'
 import { isRightResponse } from '../helpers/is-right-response'
 import { isStandardResponseBody } from '../helpers/is-standard-response'
-import { codeHandlers, errorHandler } from '../helpers/code-status-handler'
 import { HTTP_STATUS_CODE } from '../config/http-code-status'
 
 /**
@@ -52,7 +53,7 @@ import { HTTP_STATUS_CODE } from '../config/http-code-status'
  * @param {boolean} allResponse 向前兼容: 是否返回整个 ResponseData
  */
 export function responseHandler(response, allResponse = false) {
-  const { data, status, statusText, /* headers, */ config } = response // 参见0 参见1
+  const { data, status, statusText, /* headers, */ request, config } = response // 参见0 参见1
   const { all, external, debug, handleError, ignoreMsg } = config
 
   if (debug || status !== HTTP_STATUS_CODE.OK) {
@@ -81,10 +82,22 @@ export function responseHandler(response, allResponse = false) {
           if (allResponse) {
             return allResponse
           } else {
-            throw new Error(errorMsg)
+            if (process.env.NODE_ENV !== 'production') {
+              console.warn(errorMsg)
+            }
+
+            return Promise.reject(
+              createError(errorMsg, config, '' + status, request, response)
+            )
           }
         } else {
-          return allResponse ? response : Promise.reject(errorMsg)
+          if (allResponse) {
+            return response
+          } else {
+            return Promise.reject(
+              createError(errorMsg, config, '' + status, request, response)
+            )
+          }
         }
       }
     }
@@ -112,6 +125,8 @@ export const needReturnResponseHandler = (response) => {
 /**
  * @see {@link https://github.com/axios/axios/blob/2ee3b482456cd2a09ccbd3a4b0c20f3d0c5a5644/dist/axios.js#L1222}
  * @typedef AxiosError
+ * @property {number|string} code
+ * @property {string} message
  * @property {RequestConfig} config
  * @property {XMLHttpRequest} [request]
  * @property {AxiosResponse} [response]
@@ -129,8 +144,10 @@ export function responseErrorHandler(error) {
   }
 
   if (config) {
+    const errMsg = getMessage(data, status, statusText)
+
     if (!error.message) {
-      error.message = getMessage(data, status, statusText)
+      error.message = errMsg
     }
 
     if (!error.code) {
@@ -140,7 +157,7 @@ export function responseErrorHandler(error) {
     if (handleError) {
       return Promise.reject(error)
     } else {
-      errorHandler(data, status, statusText)
+      errorMessage(errMsg)
     }
   }
 }

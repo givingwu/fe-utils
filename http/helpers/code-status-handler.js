@@ -1,6 +1,6 @@
 import router from '@@/router/index'
-import { redirectToLogin } from '@@/utils/url'
 import { warnMessage } from '@@/utils/message'
+import { redirectToLogin } from '@@/utils/url'
 import { CODE_STATUS } from '../config/custom-code-status'
 
 export const codeHandlers = {
