@@ -1,16 +1,7 @@
 import router from '@@/router/index'
 import { redirectToLogin } from '@@/utils/url'
-import { warnMessage, errorMessage } from '@@/utils/message'
-import { getMessage } from './get-message'
+import { warnMessage } from '@@/utils/message'
 import { CODE_STATUS } from '../config/custom-code-status'
-
-export function warningHandler() {
-  warnMessage(getMessage.apply(null, arguments))
-}
-
-export function errorHandler() {
-  errorMessage(getMessage.apply(null, arguments))
-}
 
 export const codeHandlers = {
   // 未经授权访问,需要重新登录
@@ -33,10 +24,10 @@ export const codeHandlers = {
     router.push({ name: 'errorNoLogin' })
   },
   // 并发异常
-  [CODE_STATUS.CONCURRENT_ERROR]: warningHandler,
+  [CODE_STATUS.CONCURRENT_ERROR]: warnMessage,
   // 并发操作异常
-  [CODE_STATUS.CONCURRENT_OPERATE_ERROR]: warningHandler,
+  [CODE_STATUS.CONCURRENT_OPERATE_ERROR]: warnMessage,
   // 100
   [CODE_STATUS.VALIDATION_CODE_ERROR]: (data) => data,
-  [CODE_STATUS.SYSTEM_ERROR]: warningHandler,
+  [CODE_STATUS.SYSTEM_ERROR]: warnMessage,
 }

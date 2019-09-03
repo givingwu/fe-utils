@@ -1,8 +1,9 @@
-import { HTTP_STATUS_CODE } from '../config/http-code-status'
+import { errorMessage } from '@@/utils/message'
 import { getMessage } from '../helpers/get-message'
 import { isRightResponse } from '../helpers/is-right-response'
 import { isStandardResponseBody } from '../helpers/is-standard-response'
 import { codeHandlers, errorHandler } from '../helpers/code-status-handler'
+import { HTTP_STATUS_CODE } from '../config/http-code-status'
 
 /**
  * @typedef {Object<string, any>} RequestConfig
@@ -69,20 +70,21 @@ export function responseHandler(response, allResponse = false) {
       if (isRightResponse(data)) {
         return allResponse ? response : data.data
       } else {
-        const handler = codeHandlers[data.code] || errorHandler
+        const handler = codeHandlers[data.code] || errorMessage
+        const errorMsg = getMessage(data, status, statusText)
 
         if (!handleError) {
           if (!ignoreMsg && handler) {
-            handler.call(data, status, statusText)
+            handler(errorMsg)
           }
 
           if (allResponse) {
             return allResponse
+          } else {
+            throw new Error(errorMsg)
           }
         } else {
-          return allResponse
-            ? response
-            : Promise.reject(getMessage(data, status, statusText))
+          return allResponse ? response : Promise.reject(errorMsg)
         }
       }
     }
