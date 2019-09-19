@@ -1,4 +1,5 @@
 import { errorMessage } from '@@/utils/message'
+import { openDownloadURL } from '../helpers/open-download-url'
 
 /**
  * requestHandler
@@ -15,6 +16,14 @@ export function requestHandler(config) {
     console.log(
       `${config.method} '${config.url}' end => ====================================\n\n`
     )
+  }
+
+  if (config.download) {
+    /**
+     * https://github.com/axios/axios/blob/93e69625a69ef7bbcf14c9bcb2a1cba2d4b5a126/lib/core/dispatchRequest.js#L52
+     * 如要使用自定义的下载方法， 则更改其 axios 的 adapter 为我们的 openDownloadURL 方法
+     */
+    config.adapter = openDownloadURL
   }
 
   return config
@@ -34,8 +43,5 @@ export function requestErrorHandler(error) {
     errorMessage(error)
   }
 
-  return Promise.reject(error).catch((error) => {
-    console.dir(error)
-    return error
-  })
+  return Promise.reject(error)
 }

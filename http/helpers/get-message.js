@@ -19,18 +19,11 @@ import { HTTP_STATUS_TEXT } from '../config/http-code-status'
 export function getMessage(data, status, statusText) {
   let msg
 
-  if (typeof data === 'object') {
+  // data cannot be null
+  if (data && typeof data === 'object') {
     msg = data.message || (data.code && ERROR_MSG_MAP[data.code])
   } else {
-    msg = ERROR_MSG_MAP[status] || statusText
-  }
-
-  if (!msg) {
-    msg = HTTP_STATUS_TEXT[status] || 'Uncaught Error (in ibuild/http)'
-
-    if (process.env.NODE_ENV !== 'production') {
-      debugger
-    }
+    msg = ERROR_MSG_MAP[status] || statusText || HTTP_STATUS_TEXT[status]
   }
 
   return msg

@@ -1,6 +1,6 @@
 import http from './index'
 
-export let _Vue
+let _Vue
 
 export default function install(Vue, namespace = '$http') {
   if (install.installed && _Vue === Vue) return
@@ -16,14 +16,12 @@ export default function install(Vue, namespace = '$http') {
     })
   } else {
     throw new ReferenceError(
-      `The namespace ${namespace} in Vue.prototype has been existed ${
-        Vue.prototype[namespace]
-      }`
+      `The namespace ${namespace} in Vue.prototype has been existed ${Vue.prototype[namespace]}`
     )
   }
 
   if (!Vue.Http) {
-    Vue.Http  = http
+    Vue.Http = http
   }
 }
 

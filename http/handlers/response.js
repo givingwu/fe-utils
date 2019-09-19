@@ -80,12 +80,8 @@ export function responseHandler(response, allResponse = false) {
           }
 
           if (allResponse) {
-            return allResponse
+            return response
           } else {
-            if (process.env.NODE_ENV !== 'production') {
-              console.warn(errorMsg)
-            }
-
             return Promise.reject(
               createError(errorMsg, config, '' + status, request, response)
             )
@@ -102,9 +98,15 @@ export function responseHandler(response, allResponse = false) {
       }
     }
   } else {
-    if (process.env.NODE_ENV !== 'production') {
-      debugger
-    }
+    return Promise.reject(
+      createError(
+        `Unexpected http status code: ${status}`,
+        config,
+        '' + status,
+        request,
+        response
+      )
+    )
   }
 }
 
@@ -135,7 +137,7 @@ export const needReturnResponseHandler = (response) => {
  * @param {AxiosError} error
  */
 export function responseErrorHandler(error) {
-  const { config, /* request, */ response } = error // References#1
+  const { config, request, response } = error // References#1
   const { debug, handleError } = config
   const { data, status, statusText /* headers */ } = response // 参见0
 
@@ -144,20 +146,27 @@ export function responseErrorHandler(error) {
   }
 
   if (config) {
-    const errMsg = getMessage(data, status, statusText)
+    const errorMsg =
+      getMessage(data, status, statusText) ||
+      error.message ||
+      'Uncaught Error (in ibuild/http)'
 
     if (!error.message) {
-      error.message = errMsg
+      error.message = errorMsg
     }
 
-    if (!error.code) {
+    if (!error.code && status) {
       error.code = status
     }
 
     if (handleError) {
       return Promise.reject(error)
     } else {
-      errorMessage(errMsg)
+      errorMessage(errorMsg)
+
+      return Promise.reject(
+        createError(errorMsg, config, '' + status, request, response)
+      )
     }
   }
 }
