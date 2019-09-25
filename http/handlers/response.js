@@ -83,7 +83,13 @@ export function responseHandler(response, allResponse = false) {
             return response
           } else {
             return Promise.reject(
-              createError(errorMsg, config, '' + status, request, response)
+              createError(
+                errorMsg,
+                config,
+                (data && data.code) || status,
+                request,
+                response
+              )
             )
           }
         } else {
@@ -91,7 +97,13 @@ export function responseHandler(response, allResponse = false) {
             return response
           } else {
             return Promise.reject(
-              createError(errorMsg, config, '' + status, request, response)
+              createError(
+                errorMsg,
+                config,
+                (data && data.code) || status,
+                request,
+                response
+              )
             )
           }
         }
@@ -102,7 +114,7 @@ export function responseHandler(response, allResponse = false) {
       createError(
         `Unexpected http status code: ${status}`,
         config,
-        '' + status,
+        (data && data.code) || status,
         request,
         response
       )
@@ -165,7 +177,13 @@ export function responseErrorHandler(error) {
       errorMessage(errorMsg)
 
       return Promise.reject(
-        createError(errorMsg, config, '' + status, request, response)
+        createError(
+          errorMsg,
+          config,
+          (data && data.code) || status,
+          request,
+          response
+        )
       )
     }
   }

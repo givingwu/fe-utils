@@ -1,5 +1,5 @@
 import createError from 'axios/lib/core/createError'
-import { isJSON } from './is-valid-json'
+import { isJSON } from '../helpers/is-valid-json'
 
 export function openDownloadURL() {
   return createForm.apply(window, arguments)
@@ -7,7 +7,7 @@ export function openDownloadURL() {
 
 const createForm = (config) =>
   new Promise((resolve, reject) => {
-    const { method, url, data } = config
+    const { method, url, data, headers } = config
     const iframe = createIframe(config, resolve, reject)
     const name = `__download__form__`
     remove(name)
@@ -21,6 +21,10 @@ const createForm = (config) =>
     form.name = name
     form.action = url
     form.method = method || 'post'
+
+    if (headers && (headers['Content-Type'] || headers['content-type'])) {
+      form.enctype = headers['Content-Type'] || headers['content-type']
+    }
 
     /**
      * A name or keyword indicating where to display the response that is received after submitting the form.
@@ -38,13 +42,13 @@ const createForm = (config) =>
     if (data) {
       let params = data
 
-      if (typeof data === 'string') {
+      /* if (typeof data === 'string' && isJSON(data)) {
         try {
           params = JSON.parse(data)
         } catch (e) {
           console.error(e)
         }
-      }
+      } */
 
       if (typeof params === 'object') {
         Object.keys(params).forEach((key) => {
@@ -121,7 +125,7 @@ const createInput = (key, val) => {
   const input = document.createElement('input')
   input.type = 'hidden'
   input.name = key
-  input.value = JSON.stringify(val || {})
+  input.value = val && typeof val === 'object' ? JSON.stringify(val) : val
 
   return input
 }

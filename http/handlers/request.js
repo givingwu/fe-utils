@@ -1,5 +1,5 @@
 import { errorMessage } from '@@/utils/message'
-import { openDownloadURL } from '../helpers/open-download-url'
+import { openDownloadURL } from '../adapter/open-download-url'
 
 /**
  * requestHandler

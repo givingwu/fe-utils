@@ -9,19 +9,39 @@ export const codeHandlers = {
     redirectToLogin()
   },
   // 没有功能权限
-  [CODE_STATUS.NO_PERMISSION]: () => {
-    router.push({ name: 'error401' })
+  [CODE_STATUS.NO_PERMISSION]: (error) => {
+    router.push({
+      name: 'error401',
+      params: {
+        error,
+      },
+    })
   },
   // 没有数据权限
-  [CODE_STATUS.NO_DATA_PERMISSION]: () => {
-    router.push({ name: 'error401' })
+  [CODE_STATUS.NO_DATA_PERMISSION]: (error) => {
+    router.push({
+      name: 'error401',
+      params: {
+        error,
+      },
+    })
   },
-  [CODE_STATUS.NOT_FOUND]: () => {
-    router.push({ name: 'error404' })
+  [CODE_STATUS.NOT_FOUND]: (error) => {
+    router.push({
+      name: 'error404',
+      params: {
+        error,
+      },
+    })
   },
   // 不允许登录本系统
-  [CODE_STATUS.DISABLED_LOGIN]: () => {
-    router.push({ name: 'errorNoLogin' })
+  [CODE_STATUS.DISABLED_LOGIN]: (error) => {
+    router.push({
+      name: 'errorNoLogin',
+      params: {
+        error,
+      },
+    })
   },
   // 并发异常
   [CODE_STATUS.CONCURRENT_ERROR]: warnMessage,
