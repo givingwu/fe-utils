@@ -50,7 +50,7 @@ class FPromise {
 
   static reject = function(reason) {
     // 返回一个已拒绝状态 onRejected 的 Promise: { status: 'rejected', value: reason }
-    return new Promise((_, reject) => reject(reason));
+    return new FPromise((_, reject) => reject(reason));
   };
 
   /**
